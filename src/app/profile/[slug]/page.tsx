@@ -1,0 +1,7 @@
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import {MapPin,ArrowLeft} from 'lucide-react';
+import {profiles} from '../../../data/profiles';
+import FavoritesButton from '../../../components/FavoritesButton';
+export function generateStaticParams(){return profiles.map(p=>({slug:p.slug}));}
+export default async function ProfilePage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const p=profiles.find(x=>x.slug===slug);if(!p)notFound();return <main className="container profile-page"><Link className="back-link" href="/catalog"><ArrowLeft size={16}/> Назад к каталогу</Link><div className="profile-layout"><div className={'profile-cover '+p.tone}><div className="portrait-art"><span>VELVET</span><span>PRIVATE SPA</span></div><span className="demo-label">ДЕМО АНКЕТА</span></div><div className="profile-summary"><span className="eyebrow">PRIVATE PROFILE · 18+</span><div className="profile-heading"><h1>{p.name}, {p.age}</h1><FavoritesButton slug={p.slug}/></div><p className="location"><MapPin size={16}/>{p.city} · {p.district}</p><p className="profile-description">{p.description}</p><div className="tags">{p.services.map(s=><span key={s}>{s}</span>)}</div><div className="profile-price">Стоимость от <strong>{p.price.toLocaleString('ru-RU')} ₽</strong></div><p className="disclaimer">Это вымышленная демонстрационная анкета. Контакты и запись отсутствуют.</p></div></div></main>}
